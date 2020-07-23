@@ -22,7 +22,8 @@ Gem::Specification.new do |s|
   s.require_path = 'lib'
   s.requirements << 'none'
 
-  s.add_dependency 'solidus_core'
+  s.add_dependency 'spree_core', '~> 4.1'
+  s.add_dependency 'spree_frontend', '~> 4.1'
   s.add_dependency 'offsite_payments'
   s.add_dependency 'payuindia'
 
