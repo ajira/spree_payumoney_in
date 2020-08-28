@@ -3,7 +3,7 @@
 <% payment_form_for_payu @key, @salt,
       :txnid => "#{@txnid}",
       :amount => @amount,
-      :productinfo => 'Garments',
+      :productinfo => @product_type,
       :firstname => "#{@firstname || @email}",
       :email => "#{@email}",
       :phone => "#{@phone}",
