@@ -21,6 +21,23 @@ module Spree
         @city = address.city #udf3
       end
 
+      log_hash = { 
+        purpose: "Payment Initiation", 
+        txnid: @txnid,
+        amount: @amount,
+        email: @email,
+        phone: @phone,
+        firstname: @firstname,
+        lastname: @lastname,
+        city: @city,
+        payment_method_id: @payment_method_id
+      }  
+
+      Spree::LogEntry.create({
+        source: payment_method,
+        details: { log_hash.to_yaml }
+      })
+
       @payment_method_id = payment_method.id #udf4
     end
 
