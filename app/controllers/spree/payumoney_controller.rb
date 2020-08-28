@@ -13,7 +13,7 @@ module Spree
       @txnid = payment_method.txnid(current_order)
       @amount = current_order.total.to_s
       @email = current_order.email
-      @product_type = product_type
+      @product_type = "Garments"
 
       if(address = current_order.bill_address || current_order.ship_address)
         @phone = address.phone #udf2
@@ -99,10 +99,6 @@ module Spree
       #redirect to payment path and ask user to complete checkout
       #with different payment method
       redirect_to checkout_state_path(current_order.state)
-    end
-
-    def product_type
-      "Garments"
     end
 
     private
