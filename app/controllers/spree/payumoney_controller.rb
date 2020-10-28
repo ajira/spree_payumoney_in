@@ -51,7 +51,8 @@ module Spree
         details: params.to_yaml
       })
 
-      order = current_order || raise(ActiveRecord::RecordNotFound)
+      transaction_id = params[:txnid]
+      order = current_order || order_from_txnid(transaction_id) || raise(ActiveRecord::RecordNotFound)
 
       if(address = order.bill_address || order.ship_address)
         firstname = address.firstname
@@ -90,19 +91,28 @@ module Spree
       payment_method = Spree::PaymentMethod.find(payment_method_id)
       #log some entry into table
       Spree::LogEntry.create({
-        source: payment_method,
-        details: params.to_yaml
-      })
+                                 source: payment_method,
+                                 details: params.to_yaml
+                             })
 
       flash[:notice] = "Don't want to use Payumoney? No problems."
       #redirect to payment path and ask user to complete checkout
       #with different payment method
-      redirect_to checkout_state_path(current_order.state)
+
+      transaction_id = params[:txnid]
+      order = current_order || order_from_txnid(transaction_id)
+      redirect_to checkout_state_path(order.state)
     end
 
     private
+
     def payment_method_id
       params[:udf4]
+    end
+
+    def order_from_txnid(txn_id)
+      order_id = txn_id[0..txn_id.index('R') - 1]
+      Spree::Order.find(order_id)
     end
   end
 end
